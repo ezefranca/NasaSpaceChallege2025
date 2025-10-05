@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this software in a publication, please cite it using the metadata below."
+title: "Caravel to Mars: NASA Space Apps 2025"
+version: "0.1.0"
+date-released: 2025-10-05
+authors:
+  - given-names: "Ezequiel"
+    family-names: "França dos Santos"
+    orcid: "0000-0001-9321-8444"
+    affiliations:
+      - "Portugal"
+  - given-names: "Tomás"
+    family-names: "Rodrigues"
+    orcid: ""
+    affiliations:
+      - "Portugal"
+  - given-names: "Marco António dos Santos"
+    family-names: "Marques"
+    orcid: ""
+    affiliations:
+      - "Portugal"
+  - given-names: "Sara"
+    family-names: "Matos"
+    orcid: ""
+    affiliations:
+      - "Portugal"
+  - given-names: "Ana"
+    family-names: "Oliveira"
+    orcid: ""
+    affiliations:
+      - "Portugal"
+  - given-names: "Ana Rita Pestana Freitas Correia"
+    family-names: "Moura"
+    orcid: ""
+    affiliations:
+      - "Portugal"
+repository-code: "https://github.com/ezefranca/NasaSpaceChallege2025"
+license: "MIT"
+keywords:
+  - "Serious Game"
+  - "Mars"
+  - "Recycling"
+  - "Additive Manufacturing"
+  - "In-situ Resource Utilization"
+  - "Education"
