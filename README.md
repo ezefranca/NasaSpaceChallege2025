@@ -20,7 +20,7 @@
    </picture>
    <br/>
    <b>Simulator Walkthrough</b><br/>
-   <video src="assets/media/videos/simulator-screen.mp4" width="560" controls poster="assets/media/images/Colorway=2-Color%20Black@2x.png"></video>
+   <video src="assets/media/videos/simulator_video_high.mp4" width="560" controls poster="assets/media/images/Colorway=2-Color%20Black@2x.png"></video>
    <br/><br/>
    <b>Teaser Trailer</b><br/>
    <video src="assets/media/videos/teaser.mp4" width="560" controls poster="assets/media/images/Colorway=2-Color%20Black@3x.png"></video>
