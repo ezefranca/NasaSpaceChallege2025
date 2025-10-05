@@ -13,6 +13,8 @@ public class ManufacturingTerminal : MonoBehaviour
 
     [Header("Terminal Look & Feel")] public Font terminalFont;
     public int fontSize = 16;
+    [Tooltip("Extra size boost applied specifically to the evaluation result line for readability.")]
+    public int evalEmphasis = 6;
     public Color backgroundColor = new Color(0f, 0f, 0f, 0.90f);
     public Color primaryColor = new Color(0.0f, 0.95f, 0.5f); // matrix green
     public Color accentColor = new Color(0.3f, 0.9f, 1f); // cyan accent
@@ -149,14 +151,23 @@ public class ManufacturingTerminal : MonoBehaviour
             $"CrossLayer [C] : {crossLayer}    ReinforcedCF [R]: {reinforcedCF}\n\n" +
             "Press [F] Evaluate | [T/M/P] Cycle | [C] CrossLayer | [R] Reinforced" + (usePartObject ? " | (auto mass)" : " | [Arrows] Mass/Recycles") + "\n\n";
 
-        string eval = lastEval.explanation ?? "(no evaluation yet)";
-        string status = $"Strength OK: {lastEval.meetsStrength} | TempRange OK: {(lastEval.meetsTempLow && lastEval.meetsTempHigh)}\n" +
-                        $"σ≈{lastEval.estStrength_MPa:F1} MPa | E≈{lastEval.energy_Wh:F1} Wh | t≈{lastEval.time_s/60f:F1} min";
+    string eval = lastEval.explanation ?? "(no evaluation yet)";
+    bool hasEval = lastEval.explanation != null;
+    bool passAll = lastEval.meetsStrength && lastEval.meetsTempLow && lastEval.meetsTempHigh && hasEval;
+    Color evalColor = hasEval ? (passAll ? accentColor : warningColor) : primaryColor;
+
+    // Temporarily push bigger font for the evaluation line
+    int origSize = terminalStyle.fontSize;
+    var bigStyle = new GUIStyle(terminalStyle) { fontSize = fontSize + evalEmphasis, fontStyle = FontStyle.Bold };
+    bigStyle.normal.textColor = evalColor;
+
+    string status = $"Strength OK: {lastEval.meetsStrength} | TempRange OK: {(lastEval.meetsTempLow && lastEval.meetsTempHigh)}\n" +
+            $"σ≈{lastEval.estStrength_MPa:F1} MPa | E≈{lastEval.energy_Wh:F1} Wh | t≈{lastEval.time_s/60f:F1} min";
 
         GUILayout.Label($"<color=#{ColorToHex(primaryColor)}>{header}</color>", terminalStyle);
         GUILayout.Space(4);
         GUILayout.Label($"<color=#{ColorToHex(primaryColor)}>{body}</color>", terminalStyle);
-        GUILayout.Label($"<color=#{ColorToHex(accentColor)}>{eval}</color>", terminalStyle);
+    GUILayout.Label($"<color=#{ColorToHex(evalColor)}>{eval}</color>", bigStyle);
         GUILayout.Space(2);
         GUILayout.Label($"<color=#{ColorToHex(primaryColor)}>{status}</color> {blink}", terminalStyle);
 

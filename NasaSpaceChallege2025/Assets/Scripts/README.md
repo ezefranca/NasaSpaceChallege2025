@@ -1,8 +1,11 @@
 # Team Caravel to Mars – NASA Space Apps Hackathon 2025
 
 <p align="center">
-  <img src="assets/media/images/spaceapps-2c-black.svg#gh-light-mode-only" alt="NASA Space Apps 2025 – Caravel to Mars" width="300">
-  <img src="assets/media/images/spaceapps-2c-white.svg#gh-dark-mode-only"  alt="NASA Space Apps 2025 – Caravel to Mars" width="300">
+   <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/media/images/Colorway=2-Color%20White.svg">
+      <source media="(prefers-color-scheme: light)" srcset="assets/media/images/Colorway=2-Color%20Black.svg">
+      <img src="assets/media/images/Colorway=2-Color%20Black.svg" alt="NASA Space Apps 2025 – Caravel to Mars" width="300" />
+   </picture>
 </p>
 
 > Designing sustainable in‑situ recycling and manufacturing systems for long‑duration Mars missions through an interactive 3D serious game and evaluative simulation layer.
@@ -23,14 +26,14 @@ _Source: NASA Space Technology Mission Directorate – Mars surface recycling sy
 
 We blend **software engineering**, **human–computer interaction**, and **serious games research** to prototype decision support systems that turn *waste into mission capability*.
 
-| Role (Target / Current) | Member | Handle | Location |
-|-------------------------|--------|--------|----------|
-| Team Owner / Engineering Lead | Ezequiel França dos Santos | @ezefranca | Portugal |
-| Systems & Gameplay | Tomás Rodrigues | @tomasd | Portugal |
-| Simulation & Data | Marco António dos Santos Marques | @marcomarques | Portugal |
-| UX / Visual / Research | Sara Matos | @blumea | Portugal |
-| Interaction / Narrative | Ana Oliveira | @anao | Portugal |
-| Sustainability & Materials Insight | Ana Rita Pestana Freitas Correia Moura | @ritamoura | Portugal |
+| Member | Handle | Location |
+|--------|--------|----------|
+| Ezequiel França dos Santos | @ezefranca | Portugal |
+| Tomás Rodrigues | @tomasd | Portugal |
+| Marco António dos Santos Marques | @marcomarques | Portugal |
+| Sara Matos | @blumea | Portugal |
+| Ana Oliveira | @anao | Portugal |
+| Ana Rita Pestana Freitas Correia Moura | @ritamoura | Portugal |
 
 **Seeking collaborators** in: Materials Science (mechanical & thermal degradation models), Industrial / Product Design (waste object classification & geometry pipelines), and 3D Modeling (Mars base assets, manufacturing rigs, recycled part variants).
 
@@ -194,10 +197,14 @@ This project is **exploratory** and **educational**; outputs are *not* intended 
 NASA Space Apps name and logo belong to their respective owners. This repository is an independent hackathon project and is **not an official NASA product**. All referenced NASA documents are public domain or publicly accessible resources. Any simplifications or assumptions are the responsibility of the team.
 
 ---
+## 13. License
+(Choose one – e.g., MIT / Apache-2.0 / CC-BY. Add actual license file.)
 
 ---
-## 13. Contact
-For collaboration or data contribution you can use the Github Issues.
+## 14. Contact
+For collaboration or data contribution:  
+Primary Contact: **Ezequiel França dos Santos (@ezefranca)**  
+Location: Lisbon, Portugal
 
 ---
 *Caravel to Mars – Iterating toward circular resource loops for sustainable exploration.*

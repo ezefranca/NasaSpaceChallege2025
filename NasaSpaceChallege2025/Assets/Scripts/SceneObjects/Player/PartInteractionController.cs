@@ -14,6 +14,27 @@ public class PartInteractionController : MonoBehaviour
 
     [Header("UI Toggle")] public bool showHUD = true;
 
+    [Header("HUD Styles")] public int hudFontSize = 14; // base font size for general info
+    public int evalFontSize = 22; // emphasized evaluation result font size
+    public Color evalOkColor = new Color(0.2f, 1f, 0.3f);
+    public Color evalFailColor = new Color(1f, 0.4f, 0.2f);
+    public Color evalPendingColor = new Color(1f, 0.95f, 0.3f);
+    public bool evalOutline = true;
+    public Color evalOutlineColor = new Color(0f,0f,0f,0.9f);
+    [Tooltip("Toggle compact HUD (hides some lines)")] public KeyCode toggleCompactKey = KeyCode.BackQuote;
+    public bool compactHUD = false;
+
+    [Header("Auto Hide & Fade")] public bool autoHide = true;
+    [Tooltip("Seconds of inactivity before HUD fades out (interaction = key press or selection change)")] public float hideDelay = 6f;
+    [Tooltip("Seconds for fade in/out")] public float fadeDuration = 0.5f;
+    [Tooltip("Keep HUD visible while a part is targeted even if inactive.")] public bool keepVisibleOnTarget = true;
+
+    [Header("Status Icons & Colors")] public bool showStatusIcons = true;
+    public string passIcon = "✔"; public string failIcon = "✖"; public string pendingIcon = "…";
+    public Color passColor = new Color(0.3f,1f,0.4f);
+    public Color failColor = new Color(1f,0.35f,0.25f);
+    public Color pendingColor = new Color(1f,0.9f,0.4f);
+
     [Header("Highlight")] public Color highlightColor = new Color(0f,1f,0.5f,0.4f);
 
     ManufacturablePart current;    // currently looked-at part
@@ -35,6 +56,39 @@ public class PartInteractionController : MonoBehaviour
     {
         if (!playerCamera) playerCamera = Camera.main;
         console = FindObjectOfType<ManufacturingConsole>();
+    }
+
+    GUIStyle boxStyle, baseStyle, evalStyle;
+    int _lastHudFontSize, _lastEvalFontSize;
+
+    void EnsureStyles()
+    {
+        if (baseStyle != null && _lastHudFontSize == hudFontSize && _lastEvalFontSize == evalFontSize) return;
+
+        _lastHudFontSize = hudFontSize;
+        _lastEvalFontSize = evalFontSize;
+
+        baseStyle = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = hudFontSize,
+            alignment = TextAnchor.UpperLeft,
+            wordWrap = true
+        };
+        baseStyle.normal.textColor = Color.white;
+
+        evalStyle = new GUIStyle(baseStyle)
+        {
+            fontSize = evalFontSize,
+            fontStyle = FontStyle.Bold
+        };
+        evalStyle.normal.textColor = evalPendingColor;
+
+        boxStyle = new GUIStyle(GUI.skin.box)
+        {
+            normal = { textColor = Color.white },
+            fontSize = hudFontSize,
+            alignment = TextAnchor.UpperLeft
+        };
     }
 
     void Update()
@@ -72,7 +126,13 @@ public class PartInteractionController : MonoBehaviour
                 float massKg = current.GetMassKg(db, mat);
                 lastEval = console.Evaluate(task.id, mat.id, proc, massKg, crossLayer:false, reinforcedCF:false, recycleCycles:0);
             }
+            TouchInteraction();
         }
+
+        if (Input.GetKeyDown(toggleCompactKey)) compactHUD = !compactHUD;
+
+        // Fade logic
+        UpdateFade();
     }
 
     void RaycastSelect()
@@ -101,6 +161,7 @@ public class PartInteractionController : MonoBehaviour
         var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
         mat.SetColor("_BaseColor", highlightColor);
         targetRenderer.material = mat;
+        TouchInteraction();
     }
 
     void ClearHighlight()
@@ -115,6 +176,25 @@ public class PartInteractionController : MonoBehaviour
 
     void OnDisable() => ClearHighlight();
 
+    float lastInteractionTime = -999f; // epoch
+    float hudAlpha = 1f; // current fade alpha
+
+    void TouchInteraction()
+    {
+        lastInteractionTime = Time.time;
+    }
+
+    void UpdateFade()
+    {
+        if (!autoHide) { hudAlpha = 1f; return; }
+        bool activeTarget = keepVisibleOnTarget && current != null;
+        float since = Time.time - lastInteractionTime;
+        float targetA = (since < hideDelay || activeTarget) ? 1f : 0f;
+        if (Mathf.Approximately(fadeDuration, 0f)) { hudAlpha = targetA; return; }
+        float speed = Time.deltaTime / Mathf.Max(0.0001f, fadeDuration);
+        hudAlpha = Mathf.MoveTowards(hudAlpha, targetA, speed);
+    }
+
     void OnGUI()
     {
         if (!showHUD) return;
@@ -123,6 +203,8 @@ public class PartInteractionController : MonoBehaviour
             GUI.Label(new Rect(20,20,400,40), "Manufacturing DB not loaded.");
             return;
         }
+
+        EnsureStyles();
 
         var db = console.DB;
         GUI.Label(new Rect(Screen.width/2 - 4, Screen.height/2 - 4, 8, 8), "+"); // simple crosshair
@@ -143,14 +225,92 @@ public class PartInteractionController : MonoBehaviour
         string matId = (activeMats != null && activeMats.Length > 0) ? activeMats[Mathf.Clamp(matIdx,0,activeMats.Length-1)] : "(none)";
         string procId = (activeProcs != null && activeProcs.Length > 0) ? activeProcs[Mathf.Clamp(procIdx,0,activeProcs.Length-1)] : "(none)";
 
-        string evalLine = string.IsNullOrEmpty(lastEval.explanation) ? "(F to evaluate)" : lastEval.explanation;
+        string evalLine = string.IsNullOrEmpty(lastEval.explanation) ? "Press [F] to evaluate" : lastEval.explanation;
 
-        GUI.Box(new Rect(20, Screen.height - 170, 520, 150), "");
-        GUI.Label(new Rect(30, Screen.height - 160, 500, 140),
-            $"TARGET: {current.name}\n" +
-            $"Task: {task.id}  Mat[1]: {matId}  Proc[2]: {procId}\n" +
-            $"Keys: [F] Evaluate  [1] Cycle Material  [2] Cycle Process\n" +
-            $"Result: {evalLine}\n" +
-            $"StrengthOK={lastEval.meetsStrength}  TempOK={(lastEval.meetsTempLow && lastEval.meetsTempHigh)}  t={(lastEval.time_s/60f):F1}min");
+        // Determine evaluation color (pass if meets all criteria)
+        bool hasResult = !string.IsNullOrEmpty(lastEval.explanation);
+        bool pass = lastEval.meetsStrength && lastEval.meetsTempLow && lastEval.meetsTempHigh && hasResult;
+        if (hasResult)
+            evalStyle.normal.textColor = pass ? evalOkColor : evalFailColor;
+        else
+            evalStyle.normal.textColor = evalPendingColor;
+
+        // Dynamic height estimate based on fonts
+        float panelW = 600f;
+        // If compact hide keys + status or reduce spacing
+        float panelH = compactHUD ? 150f : 200f;
+        float panelY = Screen.height - panelH - 20f;
+    // Respect fade alpha (crosshair stays full alpha for aiming)
+    var prevColor = GUI.color;
+    GUI.color = new Color(prevColor.r, prevColor.g, prevColor.b, prevColor.a * hudAlpha);
+    GUI.Box(new Rect(20, panelY, panelW, panelH), GUIContent.none, boxStyle);
+
+        float y = panelY + 10f;
+        GUI.Label(new Rect(30, y, panelW - 40f, 40f), $"TARGET: {current.name}", baseStyle); y += hudFontSize + 8f;
+        GUI.Label(new Rect(30, y, panelW - 40f, 40f), $"Task: {task.id}    Mat[1]: {matId}    Proc[2]: {procId}", baseStyle); y += hudFontSize + 6f;
+        if (!compactHUD)
+        {
+            GUI.Label(new Rect(30, y, panelW - 40f, 50f), "Keys: [F] Evaluate   [1] Material   [2] Process   [`] Compact", baseStyle); y += hudFontSize + 10f;
+        }
+
+        var evalRect = new Rect(30, y, panelW - 40f, evalFontSize + 28f);
+        DrawOutlinedLabel(evalRect, evalLine, evalStyle, evalOutline && hasResult ? evalOutlineColor : new Color(0,0,0,0));
+        y += evalFontSize + 14f;
+        if (!compactHUD)
+        {
+            string strengthTok = showStatusIcons ? (lastEval.meetsStrength ? passIcon : (hasResult ? failIcon : pendingIcon)) : (lastEval.meetsStrength ? "OK" : "FAIL");
+            string tempTok = showStatusIcons ? ((lastEval.meetsTempLow && lastEval.meetsTempHigh) ? passIcon : (hasResult ? failIcon : pendingIcon)) : ((lastEval.meetsTempLow && lastEval.meetsTempHigh) ? "OK" : "FAIL");
+            Color strengthColor = hasResult ? (lastEval.meetsStrength ? passColor : failColor) : pendingColor;
+            Color tempColor = hasResult ? ((lastEval.meetsTempLow && lastEval.meetsTempHigh) ? passColor : failColor) : pendingColor;
+            var prev = GUI.color;
+            string statusTime = hasResult ? $" t={(lastEval.time_s/60f):F1}min" : "";
+            // Strength
+            GUI.color = new Color(prev.r, prev.g, prev.b, prev.a * hudAlpha);
+            DrawInlineColored(new Rect(30, y, panelW - 40f, 25f),
+                $"Strength: ", strengthTok, strengthColor, baseStyle);
+            y += hudFontSize + 6f;
+            DrawInlineColored(new Rect(30, y, panelW - 40f, 25f),
+                $"TempRange: ", tempTok + statusTime, tempColor, baseStyle);
+            GUI.color = prev;
+        }
+        GUI.color = prevColor; // restore global GUI color
+    }
+
+    void DrawOutlinedLabel(Rect r, string text, GUIStyle style, Color outlineColor, int thickness = 1)
+    {
+        if (outlineColor.a > 0.01f)
+        {
+            var prev = GUI.color;
+            GUI.color = outlineColor;
+            for (int dx = -thickness; dx <= thickness; dx++)
+            for (int dy = -thickness; dy <= thickness; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+                var rr = new Rect(r.x + dx, r.y + dy, r.width, r.height);
+                GUI.Label(rr, text, style);
+            }
+            GUI.color = prev;
+        }
+        GUI.Label(r, text, style);
+    }
+
+    void DrawInlineColored(Rect r, string prefix, string token, Color tokenColor, GUIStyle style)
+    {
+        // Simple inline: draw prefix then colored token using rich text fallback if style supports
+        if (!style.richText)
+        {
+            // manual two labels
+            float mid = GUI.skin.label.CalcSize(new GUIContent(prefix)).x;
+            GUI.Label(new Rect(r.x, r.y, mid + 4f, r.height), prefix, style);
+            var prev = GUI.color;
+            GUI.color = tokenColor;
+            GUI.Label(new Rect(r.x + mid, r.y, r.width - mid, r.height), token, style);
+            GUI.color = prev;
+        }
+        else
+        {
+            string hex = ColorUtility.ToHtmlStringRGB(tokenColor);
+            GUI.Label(r, prefix + $"<color=#{hex}>{token}</color>", style);
+        }
     }
 }
