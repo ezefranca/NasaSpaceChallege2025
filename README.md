@@ -26,7 +26,13 @@ https://github.com/user-attachments/assets/9f4b981d-9041-4cb4-b07b-05b957dece01
 
    <br/><br/>
    <b>Teaser Trailer</b><br/>
-   <video src="assets/media/videos/teaser.mp4" width="560" controls poster="assets/media/images/Colorway=2-Color%20Black@3x.png"></video>
+
+
+
+Uploading caravelv2.mp4…
+
+
+
 </p>
 
 *If the videos do not render on a given platform, open them directly:*
