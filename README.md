@@ -39,7 +39,7 @@ https://github.com/user-attachments/assets/d579fefb-7069-430c-ad48-b4b65e1776c4
 </p>
 
 *If the videos do not render on a given platform, open them directly:*
-[`Simulator`](assets/media/videos/simulator-screen.mp4) · [`Teaser`](assets/media/videos/teaser.mp4)
+[`Simulator`](https://github.com/user-attachments/assets/9f4b981d-9041-4cb4-b07b-05b957dece01) · [`Teaser`](https://github.com/user-attachments/assets/d579fefb-7069-430c-ad48-b4b65e1776c4)
 
 ---
 ## 1. Challenge Context
