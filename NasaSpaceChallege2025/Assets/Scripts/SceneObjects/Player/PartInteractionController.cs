@@ -211,7 +211,7 @@ public class PartInteractionController : MonoBehaviour
 
         if (current == null)
         {
-            GUI.Label(new Rect(20, Screen.height - 80, 480, 70), "Look at a manufacturable part (add ManufacturablePart.cs).");
+            //GUI.Label(new Rect(20, Screen.height - 80, 480, 70), "Look at a manufacturable part (add ManufacturablePart.cs).");
             return;
         }
 
