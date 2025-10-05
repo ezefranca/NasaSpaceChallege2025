@@ -11,6 +11,25 @@
 > Designing sustainable in‑situ recycling and manufacturing systems for long‑duration Mars missions through an interactive 3D serious game and evaluative simulation layer.
 
 ---
+## Demo & Teaser Videos
+<p align="center">
+   <!-- Assumption: replace filenames if different -->
+   <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/media/images/Colorway=1-Color%20Black.svg">
+      <img src="assets/media/images/Colorway=1-Color%20Black.svg" alt="Divider" width="1" height="1" style="opacity:0;" />
+   </picture>
+   <br/>
+   <b>Simulator Walkthrough</b><br/>
+   <video src="assets/media/videos/simulator-screen.mp4" width="560" controls poster="assets/media/images/Colorway=2-Color%20Black@2x.png"></video>
+   <br/><br/>
+   <b>Teaser Trailer</b><br/>
+   <video src="assets/media/videos/teaser.mp4" width="560" controls poster="assets/media/images/Colorway=2-Color%20Black@3x.png"></video>
+</p>
+
+*If the videos do not render on a given platform, open them directly:*
+[`Simulator`](assets/media/videos/simulator-screen.mp4) · [`Teaser`](assets/media/videos/teaser.mp4)
+
+---
 ## 1. Challenge Context
 During a hypothetical 3‑year Mars mission (8 crew), an estimated **12,600 kg of inorganic waste** (packaging, textiles, structural polymers, metals, composites) would accumulate. Resupplying virgin material is mass‑expensive; returning trash is inefficient. We explore how mission crews can **close material loops** by:
 - Identifying reusable waste streams
@@ -35,7 +54,7 @@ We blend **software engineering**, **human–computer interaction**, and **serio
 | Ana Oliveira | @anao | Portugal |
 | Ana Rita Pestana Freitas Correia Moura | @ritamoura | Portugal |
 
-**Seeking collaborators** in: Materials Science (mechanical & thermal degradation models), Industrial / Product Design (waste object classification & geometry pipelines), and 3D Modeling (Mars base assets, manufacturing rigs, recycled part variants).
+<!-- Collaboration note removed per request -->
 
 ---
 ## 3. System Architecture Overview
@@ -181,12 +200,10 @@ We blend **software engineering**, **human–computer interaction**, and **serio
 
 ---
 ## 10. Contributing
-We welcome **materials engineers**, **industrial designers**, **3D artists**, **educational researchers**, and **scientific visualization specialists**.
-
-Please propose contributions via issues / design notes including:
-- Data source + justification
-- Parameterization strategy (units, bounds)
-- Validation concept (empirical, literature, heuristic)
+Currently not seeking external collaborators beyond issue reporting and bug tracking. Please use GitHub Issues for:
+- Bug reports / incorrect evaluation logic
+- Data accuracy flags (with source citation)
+- Non-intrusive polish suggestions (UI clarity, accessibility)
 
 ---
 ## 11. Ethics & Educational Positioning
@@ -198,13 +215,36 @@ NASA Space Apps name and logo belong to their respective owners. This repository
 
 ---
 ## 13. License
-(Choose one – e.g., MIT / Apache-2.0 / CC-BY. Add actual license file.)
+MIT License – see `LICENSE` file.
+
+```
+MIT License
+
+Copyright (c) 2025 Caravel to Mars Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ---
 ## 14. Contact
-For collaboration or data contribution:  
-Primary Contact: **Ezequiel França dos Santos (@ezefranca)**  
-Location: Lisbon, Portugal
+Primary Contact: GitHub Issues (open a ticket with category: question / bug / data-source)  
+Location: Lisbon, Portugal (Team base)
 
 ---
 *Caravel to Mars – Iterating toward circular resource loops for sustainable exploration.*
